@@ -9,11 +9,14 @@
 #include <istream>
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <iterator>
 #include <stdio.h>
 using namespace std;
 
 void copyFile(char*, char*);
+string readFile(char*);
+void writeFile(char*, string);
 
 int main() {
 	char inputFile[] = "./Firefox_wallpaper.png";
@@ -23,18 +26,24 @@ int main() {
 }
 
 void copyFile(char *inputFile, char* outputFile){
-//	fstream f(inputFile, fstream::in|fstream::binary);
-//	f << noskipws;
-//	istream_iterator<unsigned char> begin(f);
-//	istream_iterator<unsigned char> end;
-//
-//	fstream f2(outputFile,
-//	fstream::out|fstream::trunc|fstream::binary);
-//	ostream_iterator<char> begin2(f2);
-//
-//	copy(begin, end, begin2);
+	writeFile(outputFile, readFile(inputFile));
+}
 
-	ifstream f1(inputFile, fstream::binary);
+void writeFile(char* outputFile, string data){
 	ofstream f2(outputFile, fstream::trunc|fstream::binary);
-	f2 << f1.rdbuf();
+	f2 << data;
+}
+
+string readFile(char* inputFile){
+	std::ifstream in(inputFile, std::ios::in | std::ios::binary);
+	std::string contents;
+	if (in)
+	{
+	    in.seekg(0, std::ios::end);
+	    contents.reserve(in.tellg());
+	    in.seekg(0, std::ios::beg);
+	    contents.assign((std::istreambuf_iterator<char>(in)), std::istreambuf_iterator<char>());
+	    in.close();
+	 }
+	return contents;
 }
