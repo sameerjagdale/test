@@ -1,8 +1,4 @@
-#include<stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#define SF "./145454-itunes_10_icon.jpg"
-#define DF "./copy.jpg"
+#include "testy.h"
 
 void readFile(char*, char*);
 void writeFile(char*, int, char*);
