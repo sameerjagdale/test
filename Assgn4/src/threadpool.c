@@ -1,10 +1,3 @@
-/**
- * threadpool.c
- *
- *  Created on: Dec 11, 2010
- *      Author: Tomer Heber (heber.tomer@gmail.com).
- */
-
 #include "threadpool.h"
 
 #include <stdlib.h>
@@ -17,7 +10,7 @@
 #define REPORT_ERROR(...) fprintf (stderr,"line %d - ",__LINE__); fprintf (stderr, __VA_ARGS__); fprintf (stderr,"\n")
 #else
 #define REPORT_ERROR(...)
-#endif /* THREAD_POOL_DEBUG */
+#endif
 
 #define THREAD_POOL_QUEUE_SIZE 10000
 
