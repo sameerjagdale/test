@@ -31,7 +31,7 @@ int main(void) {
 	images[4]="lala5.jgp";
 
 	int randomNumber = rand() % 5;
-
+	int count = 1;
 	while(randomNumber!=0){
 		randomImage = images[rand() % (sizeof(arr) / sizeof(arr[0]))];
 		Send(sockfd, randomImage, strlen(randomImage));
@@ -49,9 +49,10 @@ int main(void) {
 			temp[i++] = temp[j];
 			temp[j--] = temp1;
 			}
-		writeFile(temp,atoi(buff), strcat(strcat("./copyOf", imageName),".jpg")));
+		writeFile(temp,atoi(buff), strcat(strcat(strcat("./copyOf", imageName)),count),".jpg")));
 		fprintf(stderr,"write successful");
 		randomNumber -= 1;
+		count += 1;
 	}
 
 	Close(sockfd);
