@@ -5,7 +5,7 @@
 // Copyright   : Your copyright notice
 // Description : Hello World in C++, Ansi-style
 //============================================================================
-
+/*
 #include <istream>
 #include <iostream>
 #include <fstream>
@@ -47,3 +47,4 @@ string readFile(char* inputFile){
 	 }
 	return contents;
 }
+*/

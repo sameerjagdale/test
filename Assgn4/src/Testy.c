@@ -1,10 +1,10 @@
-#include "testy.h"
+#include "Testy.h"
 
 void readFile(char*, char*);
 void writeFile(char*, int, char*);
 int getSize();
 
-void main()
+/*void main()
 {
 	char* source = "./145454-itunes_10_icon.jpg";
 	char* destination = "./copy.jpg";
@@ -14,7 +14,7 @@ void main()
 	writeFile(s, size, destination);
 	free(s);
 }
-
+*/
 //returns the size of the file
 int getSize(char* filename){
 	FILE* from;
@@ -25,6 +25,7 @@ int getSize(char* filename){
 	fseek(from, 0L, SEEK_END);
 	int size = ftell(from);
 	fseek(from, 0L, SEEK_SET);
+	fclose(from);
 	return size;
 }
 
