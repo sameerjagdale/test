@@ -9,7 +9,7 @@
 #include "Testy.h"
 
 static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
-static int count=0;
+static int count = 0;
 void negotiator(void * ptr) {
 	int *new = (int*) ptr;
 	int newsockfd = *new;
@@ -36,10 +36,10 @@ void negotiator(void * ptr) {
 		//pthread_mutex_lock(&mutex);
 		readFile(s, fileName);
 		//pthread_mutex_unlock(&mutex);
-		fprintf(stderr,"\n %ld \n",strlen(s));
+		fprintf(stderr, "\n %ld \n", strlen(s));
 		int i, j, temp;
 		i = 0;
-		j = strlen(s)-1;
+		j = strlen(s) - 1;
 		while (i < j) {
 			temp = s[i];
 			s[i++] = s[j];
@@ -49,4 +49,22 @@ void negotiator(void * ptr) {
 		free(s);
 	}
 	Close(newsockfd);
+}
+
+void incClient() {
+	pthread_mutex_lock(&mutex);
+	count++;
+	pthread_mutex_unlock(&mutex);
+}
+
+void decClient() {
+	pthread_mutex_lock(&mutex);
+	count++;
+	pthread_mutex_unlock(&mutex);
+}
+int numClient() {
+	pthread_mutex_lock(&mutex);
+	int tempCount = count;
+	pthread_mutex_unlock(&mutex);
+	return tempCount;
 }
