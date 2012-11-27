@@ -23,6 +23,7 @@ int main() {
 		exit(EXIT_FAILURE);
 	}
 	int sockfd;
+	int newsockfd;
 	sockfd = Create();
 
 	if (Bind(35000, sockfd) < 0) {
@@ -32,7 +33,12 @@ int main() {
 	Listen(sockfd, 10);
 	int i=0;
 	while (i<100) {
-	int newsockfd = Accept(sockfd);
+	incClient();
+	if(numClient()<=100){
+		newsockfd = Accept(sockfd);
+
+	}
+
 	int ret = threadpool_add_task(pool, negotiator, (void*) &newsockfd, 1);
 	i++;
 

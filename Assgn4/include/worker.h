@@ -16,5 +16,5 @@ typedef union _converter {
 void negotiator(void*);
 void incClient();
 void decClient();
-int isFull();
+int numClient();
 int isEmpty();
