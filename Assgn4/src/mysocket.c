@@ -5,7 +5,7 @@
  *      Author: sameer
  */
 
-#include "socket.h"
+#include "mysocket.h"
 
 int Create() {
 	int sockfd = -1;
@@ -20,20 +20,16 @@ int Bind(int port, int sockfd) {
 	serv_addr.sin_family = AF_INET;
 	serv_addr.sin_addr.s_addr = INADDR_ANY;
 	serv_addr.sin_port = htons(port);
-	if (bind(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0)
-		return -1;
+	fprintf(stderr,"entered bind");
+	return  bind(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr));
 
-	if (bind(sockfd, (struct sockaddr *) &serv_addr, sizeof(struct sockaddr))
-			== 0)
-		return sockfd;
-	else
-		return -1;
 }
 
-int listen(int sockfd, int queue) {
-	listen(sockfd, queue);
-	return 1;
+int Listen(int sockfd, int queue) {
+	return  listen(sockfd, queue);
+
 }
+
 int Accept(int sockfd) {
 	struct sockaddr_in cli_addr;
 	socklen_t clilen = sizeof(cli_addr);
@@ -62,12 +58,12 @@ int Connect(char* address, int port, int sockfd) {
 
 }
 
-int Recieve(int sockfd, char *buffer, int buffLen) {
-	return read(sockfd, buffer, 255);
+int Receive(int sockfd, char *buffer, unsigned long buffLen) {
+	return read(sockfd, buffer,buffLen);
 }
 
-int Send(int sockfd, const char *buffer, int len) {
-	return write(sockfd, buffer, strlen(buffer));
+int Send(int sockfd, const char *buffer, unsigned long len) {
+	return write(sockfd, buffer, len);
 }
 
 int Close(int sockfd) {
@@ -78,6 +74,8 @@ int Close(int sockfd) {
 	return -1;
 
 }
+
+//Socket programming v2
 
 /*
  int main() {

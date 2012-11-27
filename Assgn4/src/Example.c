@@ -13,7 +13,7 @@
 #include <pthread.h>
 
 #define ARR_SIZE 100
-
+/*
 static pthread_mutex_t count_mutex = PTHREAD_MUTEX_INITIALIZER;
 static int count;
 
@@ -34,16 +34,16 @@ int main(int argc, char **argv)
 		arr[i] = i;
 	}
 
-	/* Create a threadpool of 10 thread workers. */
+
 	if ((pool = threadpool_init(10)) == NULL) {
 		printf("Error! Failed to create a thread pool struct.\n");
 		exit(EXIT_FAILURE);
 	}
 	i=0;
 	while(1){
-	for (i; i < ARR_SIZE; i++) {
+	for (i=0; i < ARR_SIZE; i++) {
 
-			/* blocking. */
+
 			ret = threadpool_add_task(pool,computeSum,arr + i,1);
 
 
@@ -57,8 +57,7 @@ int main(int argc, char **argv)
 		}
 	}
 	}
-	/* Stop the pool. */
-	threadpool_free(pool,1);
+		threadpool_free(pool,1);
 
 	printf("Example ended.\n");
 	printf("%d tasks out of %d have been executed.\n",count,ARR_SIZE);
@@ -67,3 +66,4 @@ int main(int argc, char **argv)
 
 	return 0;
 }
+*/

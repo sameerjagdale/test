@@ -5,6 +5,9 @@
  *      Author: sameer
  */
 #include "mysocket.h"
+#include<pthread.h>
+
+
 typedef union _converter {
 	char charSize[4];
 	int size;

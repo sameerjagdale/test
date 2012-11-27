@@ -21,12 +21,15 @@
 #include<string.h>
 #include <sys/types.h>
 #include<unistd.h>
-
+#include "stdio.h"
 int Create();
 int Bind(int port, int sockfd);
-int listen(int sockfd, int queue);
+int Listen(int sockfd, int queue);
 int Accept(int sockfd);
 int Connect(char* address, int port, int sockfd);
-int Receive(int sockfd, char *buff, int buffSize);
-int Send(int sockfd, const char *buffer, int len);
+int Receive(int sockfd, char *buff, unsigned long buffSize);
+int Send(int sockfd, const char *buffer, unsigned long len);
 int Close(int sockfd);
+
+
+

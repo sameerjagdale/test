@@ -4,7 +4,7 @@
  *  Created on: Nov 16, 2012
  *      Author: sameer
  */
-#include <iostream>
+/*#include <iostream>
 #include "Thread.h"
 
 
@@ -45,3 +45,4 @@ Thread:: ~Thread(){
 
 
 
+*/

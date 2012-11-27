@@ -7,7 +7,7 @@
 
 
 
-
+/*
 
 class Thread {
 public:
@@ -23,3 +23,4 @@ private:
 };
 
 
+*/

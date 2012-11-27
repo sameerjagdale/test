@@ -8,30 +8,45 @@
 #include "mysocket.h"
 #include "Testy.h"
 
+static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+static int count=0;
 void negotiator(void * ptr) {
 	int *new = (int*) ptr;
 	int newsockfd = *new;
-	char* source = "./pic.jpg";
 
+	char fileName[256];
 	char buff[256];
+	int noOfBytes = 0;
+	bzero(fileName, 256);
 
-	unsigned int size = getSize(source);
+	while ((noOfBytes = Receive(newsockfd, fileName, sizeof(fileName))) > 0) {
+		if (strcmp(fileName, "EXIT") == 0) {
+			break;
+		}
 
-	sprintf(buff, "%d", size);
-	fprintf(stderr, "%d", size);
-
-	char* s = (char*) malloc(size * sizeof(char)+1);
-	readFile(s,source);
-	int i,j,temp;
-	 i=0;
-	j=strlen(s) - 1;
-	while(i < j) {
-	temp = s[i];
-	s[i++] = s[j];
-	s[j--] = temp;
+		//fileName[noOfBytes] = 0;
+		fprintf(stderr, "\n%s\n", fileName);
+		//pthread_mutex_lock(&mutex);
+		unsigned int size = getSize(fileName);
+		//pthread_mutex_unlock(&mutex);
+		sprintf(buff, "%d", size);
+		fprintf(stderr, "%d", size);
+		Send(newsockfd, buff, strlen(buff));
+		char* s = (char*) malloc(size * sizeof(char) + 1);
+		//pthread_mutex_lock(&mutex);
+		readFile(s, fileName);
+		//pthread_mutex_unlock(&mutex);
+		fprintf(stderr,"\n %ld \n",strlen(s));
+		int i, j, temp;
+		i = 0;
+		j = strlen(s)-1;
+		while (i < j) {
+			temp = s[i];
+			s[i++] = s[j];
+			s[j--] = temp;
+		}
+		Send(newsockfd, s, size);
+		free(s);
 	}
-	Send(newsockfd, buff, strlen(buff));
-	Send(newsockfd, s, size);
-	free(s);
 	Close(newsockfd);
 }

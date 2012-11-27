@@ -4,7 +4,7 @@
  *  Created on: Nov 17, 2012
  *      Author: sameer
  */
-
+/*
 #include "Mutex.h"
 
 Mutex::Mutex() {
@@ -25,3 +25,4 @@ int Mutex::trylock(){
 	return pthread_mutex_trylock(&mutex);
 }
 
+*/
