@@ -12,12 +12,27 @@
 #include "mysocket.h"
 #include "Testy.h"
 
+int getPanningSpeed(int currSpeed){
+	srand(time(NULL));
+	int randomNumber = (rand() % 6);
+
+	//50% chance of the panning speed not changing
+	if(randomNumber>3){
+		srand(time(NULL));
+		currSpeed = (rand() % 5)+1;
+	}
+
+	return currSpeed;
+}
+
 int main(int argc,char*argv[]) {
 	fprintf(stderr,"\nThread number - 	%s\n",argv[1]);
 	puts("!!!Hello World!!!"); /* prints !!!Hello World!!! */
 	int sockfd = Create();
+	//int schedulerSocket = Create();
 	char *temp = NULL;
 	char buff[7];
+	int panningSpeed = 0;
 	//char buff2[10];
 
 	if (Connect("localhost", 35000, sockfd) < 0) {
@@ -69,7 +84,10 @@ int main(int argc,char*argv[]) {
 		fprintf(stderr, "write successful");
 		randomNumber -= 1;
 		count += 1;
-
+		panningSpeed = getPanningSpeed(panningSpeed);
+		//char tempy[256];
+		//sprintf(tempy, "%d", panningSpeed);
+		//Send(schedulerSocket, tempy, strlen(tempy));
 	}
 	Close(sockfd);
 	return EXIT_SUCCESS;
