@@ -7,6 +7,7 @@
 #include "linkedList.h"
 #include<stdlib.h>
 //#define DEBUG
+linkedList *socketList = NULL;
 
 linkedList * addToList(linkedList * head, sockets newsock) {
 

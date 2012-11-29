@@ -1,6 +1,6 @@
 #include "scheduler.h"
 //#define DEBUG
-linkedList *socketList = NULL;
+
 void schedule(void *param) {
 	struct epoll_event *events;
 #ifdef DEBUG
@@ -17,7 +17,7 @@ void schedule(void *param) {
 		int numEvents = epoll_wait(epfd, events, MAX_CLIENTS, -1);
 		if (numEvents == 0) {
 #ifdef DEBUG
-			fprintf(stderr, "outof scheduler");
+			fprintf(stderr, "out of scheduler");
 #endif
 			break;
 		}

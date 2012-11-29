@@ -5,14 +5,13 @@
  *      Author: sameer
  */
 
-
 #include "stdlib.h"
 #include "mysocket.h"
 #include "linkedList.h"
+#include "EPoll.h"
 #define MAX_CLIENTS 100
-
-static  linkedList *socketList = NULL;
+int epfd;
 void add(sockets s1);
 void process(int sockfd);
-void schedule(void);
+void schedule(void*);
 

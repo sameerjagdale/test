@@ -7,7 +7,6 @@
 #include "mysocket.h"
 #include<pthread.h>
 
-
 typedef union _converter {
 	char charSize[4];
 	int size;
@@ -18,3 +17,4 @@ void incClient();
 void decClient();
 int numClient();
 int isEmpty();
+int doSend(int);
