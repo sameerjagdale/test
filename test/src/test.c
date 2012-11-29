@@ -13,6 +13,8 @@
 #include "Testy.h"
 #include "string.h"
 //#define DEBUG
+
+//get the panning speed ( a random number)
 int getPanningSpeed(int currSpeed) {
 	int randomNumber = (rand() % 6);
 
@@ -62,7 +64,7 @@ int main(int argc, char*argv[]) {
 	int randomNumber = ((rand() + getpid()) % 5) + 1;
 	int count = 1;
 
-	//just a test to prove to all the haters and disbelievers that we are using multithreading!
+	//just a test to prove that we are using multithreading!
 #ifdef DEBUG
 	fprintf(stderr, "\nPID = %d\n", getpid());
 #endif
@@ -75,6 +77,7 @@ int main(int argc, char*argv[]) {
 
 		n = Receive(sockfd, buff, sizeof(int) + 1);
 		buff[n] = 0;
+		//the server returns the image size as 0 if it does not intend to send the image
 		if(atoi(buff) != 0){
 
 			fprintf(stderr, "\nNumber of bytes read for size= %d\n", n);
@@ -95,6 +98,10 @@ int main(int argc, char*argv[]) {
 			char path[100];
 
 			strcpy(path, "./copyOfRequest");
+
+			//uncomment if you want to have the image files stored in a seperate folder
+			//strcpy(path, "./bin/copyOfRequest");
+
 			strcat(path, countChar);
 			strcat(path, "threadNo");
 			strcat(path, argv[1]);
@@ -107,6 +114,8 @@ int main(int argc, char*argv[]) {
 			fprintf(stderr, "\nServer rejected the request \n");
 		randomNumber -= 1;
 		count += 1;
+
+		//get the panning speed and send it
 		panningSpeed = getPanningSpeed(panningSpeed);
 		char tempy[256];
 		sprintf(tempy, "%d", panningSpeed);
@@ -115,6 +124,8 @@ int main(int argc, char*argv[]) {
 	char tempy[256]
 	panningSpeed = -1;
 	sprintf(tempy, "%d", panningSpeed);
+
+	//send the panning speed as -1 to indicate to the server that the client is shutting down
 	Send(schedulerfd, tempy, strlen(tempy));
 	Close(sockfd);
 	return EXIT_SUCCESS;
