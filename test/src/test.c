@@ -11,27 +11,29 @@
 #include <stdlib.h>
 #include "mysocket.h"
 #include "Testy.h"
+#include "string.h"
 
-int getPanningSpeed(int currSpeed){
+int getPanningSpeed(int currSpeed) {
 	srand(time(NULL));
 	int randomNumber = (rand() % 6);
 
 	//50% chance of the panning speed not changing
-	if(randomNumber>3){
+	if (randomNumber > 3) {
 		srand(time(NULL));
-		currSpeed = (rand() % 5)+1;
+		currSpeed = (rand() % 5) + 1;
 	}
 
 	return currSpeed;
 }
 
-int main(int argc,char*argv[]) {
-	fprintf(stderr,"\nThread number - 	%s\n",argv[1]);
+int main(int argc, char*argv[]) {
+	fprintf(stderr, "\nThread number - 	%s\n", argv[1]);
 	puts("!!!Hello World!!!"); /* prints !!!Hello World!!! */
 	int sockfd = Create();
+	int schedulerfd = Create();
 	//int schedulerSocket = Create();
 	char *temp = NULL;
-	char buff[7];
+	char buff[7], accept[256];
 	int panningSpeed = 0;
 	//char buff2[10];
 
@@ -39,7 +41,18 @@ int main(int argc,char*argv[]) {
 		printf("error in connecting");
 		exit(0);
 	}
-
+	if (Connect("localhost", 35001, schedulerfd) < 0) {
+		printf("error in connecting to scheduler");
+		exit(0);
+	}
+	int n = Receive(sockfd, accept, 256);
+	accept[n] = 0;
+	if (strcasecmp(accept, "REJECT") == 0) {
+		fprintf(stderr, "SERVER REJECTED CONNECTION: PLEASE TRY AGAIN LATER");
+		exit(0);
+	} else {
+		fprintf(stderr, "SERVER ACCEPTED CONNECTION");
+	}
 	char* images[5];
 	images[0] = "lala1.png";
 	images[1] = "lala2.png";
@@ -48,7 +61,7 @@ int main(int argc,char*argv[]) {
 	images[4] = "lala5.png";
 
 	srand(time(NULL));
-	int randomNumber = (rand() % 5)+1;
+	int randomNumber = (rand() % 5) + 1;
 	int count = 1;
 	while (randomNumber != 0) {
 		char *randomImage =
@@ -76,8 +89,8 @@ int main(int argc,char*argv[]) {
 
 		strcpy(path, "./bin/copyOfRequest");
 		strcat(path, countChar);
-		strcat(path,"threadNo");
-		strcat(path,argv[1]);
+		strcat(path, "threadNo");
+		strcat(path, argv[1]);
 		strcat(path, randomImage);
 
 		writeFile(temp, atoi(buff), path);
@@ -85,9 +98,9 @@ int main(int argc,char*argv[]) {
 		randomNumber -= 1;
 		count += 1;
 		panningSpeed = getPanningSpeed(panningSpeed);
-		//char tempy[256];
-		//sprintf(tempy, "%d", panningSpeed);
-		//Send(schedulerSocket, tempy, strlen(tempy));
+		char tempy[256];
+		sprintf(tempy, "%d", panningSpeed);
+		Send(schedulerfd, tempy, strlen(tempy));
 	}
 	Close(sockfd);
 	return EXIT_SUCCESS;
