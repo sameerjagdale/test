@@ -12,14 +12,14 @@
 #include "mysocket.h"
 #include "Testy.h"
 #include "string.h"
+//#define DEBUG
 
+//get the panning speed ( a random number)
 int getPanningSpeed(int currSpeed) {
-	srand(time(NULL));
 	int randomNumber = (rand() % 6);
 
 	//50% chance of the panning speed not changing
 	if (randomNumber > 3) {
-		srand(time(NULL));
 		currSpeed = (rand() % 5) + 1;
 	}
 
@@ -61,47 +61,73 @@ int main(int argc, char*argv[]) {
 	images[4] = "lala5.png";
 
 	srand(time(NULL));
-	int randomNumber = (rand() % 5) + 1;
+	int randomNumber = ((rand() + getpid()) % 5) + 1;
 	int count = 1;
+
+	//just a test to prove that we are using multithreading!
+#ifdef DEBUG
+	fprintf(stderr, "\nPID = %d\n", getpid());
+#endif
+
 	while (randomNumber != 0) {
-		char *randomImage =
-				images[rand() % (sizeof(images) / sizeof(images[0]))];
+		char *randomImage = images[(rand() + getpid())
+				% (sizeof(images) / sizeof(images[0]))];
 		Send(sockfd, randomImage, strlen(randomImage));
 		int n = 0;
+
 		n = Receive(sockfd, buff, sizeof(int) + 1);
 		buff[n] = 0;
-		fprintf(stderr, "\nNumber of bytes read for size= %d\n", n);
-		temp = (char*) malloc(sizeof(char) * atoi(buff));
-		int m = Receive(sockfd, temp, atoi(buff));
-		fprintf(stderr, "bytes read=%d  size given =%d\n", m, atoi(buff));
+		//the server returns the image size as 0 if it does not intend to send the image
+		if(atoi(buff) != 0){
 
-		int i, j, temp1;
-		i = 0;
-		j = strlen(temp) - 1;
-		while (i < j) {
-			temp1 = temp[i];
-			temp[i++] = temp[j];
-			temp[j--] = temp1;
+			fprintf(stderr, "\nNumber of bytes read for size= %d\n", n);
+			temp = (char*) malloc(sizeof(char) * atoi(buff));
+			int m = Receive(sockfd, temp, atoi(buff));
+			fprintf(stderr, "bytes read=%d  size given =%d\n", m, atoi(buff));
+
+			int i, j, temp1;
+			i = 0;
+			j = strlen(temp) - 1;
+			while (i < j) {
+				temp1 = temp[i];
+				temp[i++] = temp[j];
+				temp[j--] = temp1;
+			}
+			char countChar[5];
+			sprintf(countChar, "%d", count);
+			char path[100];
+
+			strcpy(path, "./copyOfRequest");
+
+			//uncomment if you want to have the image files stored in a seperate folder
+			//strcpy(path, "./bin/copyOfRequest");
+
+			strcat(path, countChar);
+			strcat(path, "threadNo");
+			strcat(path, argv[1]);
+			strcat(path, randomImage);
+
+			writeFile(temp, atoi(buff), path);
+			fprintf(stderr, "write successful");
 		}
-		char countChar[5];
-		sprintf(countChar, "%d", count);
-		char path[100];
-
-		strcpy(path, "./bin/copyOfRequest");
-		strcat(path, countChar);
-		strcat(path, "threadNo");
-		strcat(path, argv[1]);
-		strcat(path, randomImage);
-
-		writeFile(temp, atoi(buff), path);
-		fprintf(stderr, "write successful");
+		else
+			fprintf(stderr, "\nServer rejected the request \n");
 		randomNumber -= 1;
 		count += 1;
+
+		//get the panning speed and send it
 		panningSpeed = getPanningSpeed(panningSpeed);
 		char tempy[256];
 		sprintf(tempy, "%d", panningSpeed);
 		Send(schedulerfd, tempy, strlen(tempy));
+		sleep(rand());
 	}
+	char tempy[256];
+	panningSpeed = -1;
+	sprintf(tempy, "%d", panningSpeed);
+
+	//send the panning speed as -1 to indicate to the server that the client is shutting down
+	Send(schedulerfd, tempy, strlen(tempy));
 	Close(sockfd);
 	return EXIT_SUCCESS;
 }
