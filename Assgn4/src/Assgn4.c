@@ -59,7 +59,7 @@ int main() {
 			socketList = addToList(socketList, newsock);
 #ifdef DEBUG
 			if(socketList==NULL) {
-				fprintf(stderr,"socketlist is null dumbass");
+				fprintf(stderr,"socketlist is null");
 				exit(0);
 			}
 #endif

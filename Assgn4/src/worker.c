@@ -51,6 +51,7 @@ void negotiator(void * ptr) {
 			free(s);
 			panning = panList->data.priority;
 		}
+		//send the file length as 0
 		else{
 			sprintf(buff, "%d", 0);
 			Send(newsockfd, buff, strlen(buff));
@@ -60,6 +61,7 @@ void negotiator(void * ptr) {
 	Close(newsockfd);
 }
 
+//decide using the panning speed whether to send or not
 int doSend(int panning) {
 	srand(time(NULL));
 	if(rand() % panning == 0)
