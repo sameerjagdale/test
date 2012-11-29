@@ -32,7 +32,7 @@ void negotiator(void * ptr) {
 		//pthread_mutex_unlock(&mutex);
 		sprintf(buff, "%d", size);
 		fprintf(stderr, "%d", size);
-		if (doSend(panning)) {
+		if (doSend(panning) == 1) {
 			Send(newsockfd, buff, strlen(buff));
 			char* s = (char*) malloc(size * sizeof(char) + 1);
 			//pthread_mutex_lock(&mutex);
@@ -51,13 +51,23 @@ void negotiator(void * ptr) {
 			free(s);
 			panning = panList->data.priority;
 		}
+		else{
+			sprintf(buff, "%d", 0);
+			Send(newsockfd, buff, strlen(buff));
+			panning = panList->data.priority;
+		}
 	}
 	Close(newsockfd);
 }
 
 int doSend(int panning) {
-	return 1;
+	srand(time(NULL));
+	if(rand() % panning == 0)
+		return 1;
+	else
+		return 0;
 }
+
 void incClient() {
 	pthread_mutex_lock(&mutex);
 	count++;

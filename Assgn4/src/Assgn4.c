@@ -10,6 +10,7 @@
 #include "Mutex.h"
 #include <unistd.h>
 #include "mysocket.h"
+#include <pthread.h>
 #include <stdio.h>
 #include "threadpool.h"
 #include "Testy.h"
@@ -40,7 +41,7 @@ int main() {
 	}
 	Listen(sockfd, 10);
 	Listen(schedulerfd, 10);
-	pthread_create(&schedulerThread, 0, (void*) &schedule, NULL );
+	pthread_create(&schedulerThread, 0, (void*) &schedule, NULL);
 	int i = 0;
 	while (i < 100) {
 		incClient();

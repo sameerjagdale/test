@@ -29,7 +29,7 @@ void schedule(void *param) {
 			Receive(fd, buff, sizeof(int) + 1);
 			linkedList *temp = searchScheduler(socketList, fd);
 			if (atoi(buff) >= 0 && temp != NULL ) {
-				temp->data.priority = ((float) 1 / (atoi(buff) + 1)) * 1000;
+				temp->data.priority = ((float) (atoi(buff) + 1)) * 1000;
 			} else {
 				close(fd);
 				if (temp != NULL ) {
@@ -39,4 +39,3 @@ void schedule(void *param) {
 		}
 	}
 }
-
