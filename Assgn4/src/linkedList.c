@@ -6,6 +6,7 @@
  */
 #include "linkedList.h"
 #include<stdlib.h>
+//#define DEBUG
 
 linkedList * addToList(linkedList * head, sockets newsock) {
 
@@ -73,10 +74,20 @@ linkedList* searchWorker(linkedList *head, int workerFd) {
 linkedList* searchScheduler(linkedList *head, int schedulerfd) {
 	linkedList*temp = head;
 	while (temp != NULL ) {
+
 		if (temp->data.schedulerSocket == schedulerfd) {
+#ifdef DEBUG
+			fprintf(stderr,"data found ");
+#endif
 			break;
 		}
 		temp = temp->next;
+	}
+	if(temp==NULL){
+
+#ifdef DEBUG
+			fprintf(stderr,"data found ");
+#endif
 	}
 	return temp;
 }
