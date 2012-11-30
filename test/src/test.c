@@ -96,7 +96,6 @@ int main(int argc, char*argv[]) {
 			char countChar[5];
 			sprintf(countChar, "%d", count);
 			char path[100];
-
 			strcpy(path, "./copyOfRequest");
 
 			//uncomment if you want to have the image files stored in a seperate folder
@@ -120,7 +119,6 @@ int main(int argc, char*argv[]) {
 		char tempy[256];
 		sprintf(tempy, "%d", panningSpeed);
 		Send(schedulerfd, tempy, strlen(tempy));
-		sleep(rand());
 	}
 	char tempy[256];
 	panningSpeed = -1;
