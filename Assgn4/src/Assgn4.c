@@ -6,8 +6,6 @@
 // Description : Hello World in C++, Ansi-style
 //============================================================================
 
-#include "Thread.h"
-#include "Mutex.h"
 #include <unistd.h>
 #include "mysocket.h"
 #include <pthread.h>
