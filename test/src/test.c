@@ -120,7 +120,7 @@ int main(int argc, char*argv[]) {
 		char tempy[256];
 		sprintf(tempy, "%d", panningSpeed);
 		Send(schedulerfd, tempy, strlen(tempy));
-		sleep(rand());
+		//sleep(rand());
 	}
 	char tempy[256];
 	panningSpeed = -1;
