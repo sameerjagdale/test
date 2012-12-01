@@ -68,17 +68,18 @@ int main(int argc, char*argv[]) {
 #ifdef DEBUG
 	fprintf(stderr, "\nPID = %d\n", getpid());
 #endif
-
+	sleep(1);
 	while (randomNumber != 0) {
 		char *randomImage = images[(rand() + getpid())
 				% (sizeof(images) / sizeof(images[0]))];
+
 		Send(sockfd, randomImage, strlen(randomImage));
 		int n = 0;
 
 		n = Receive(sockfd, buff, sizeof(int) + 1);
 		buff[n] = 0;
 		//the server returns the image size as 0 if it does not intend to send the image
-		if(atoi(buff) != 0){
+		if (atoi(buff) != -1) {
 
 			fprintf(stderr, "\nNumber of bytes read for size= %d\n", n);
 			temp = (char*) malloc(sizeof(char) * atoi(buff));
@@ -96,8 +97,7 @@ int main(int argc, char*argv[]) {
 			char countChar[5];
 			sprintf(countChar, "%d", count);
 			char path[100];
-
-			strcpy(path, "./copyOfRequest");
+			strcpy(path, "./bin/copyOfRequest");
 
 			//uncomment if you want to have the image files stored in a seperate folder
 			//strcpy(path, "./bin/copyOfRequest");
@@ -106,12 +106,11 @@ int main(int argc, char*argv[]) {
 			strcat(path, "threadNo");
 			strcat(path, argv[1]);
 			strcat(path, randomImage);
-
 			writeFile(temp, atoi(buff), path);
 			fprintf(stderr, "write successful");
-		}
-		else
+		} else {
 			fprintf(stderr, "\nServer rejected the request \n");
+		}
 		randomNumber -= 1;
 		count += 1;
 
@@ -120,6 +119,7 @@ int main(int argc, char*argv[]) {
 		char tempy[256];
 		sprintf(tempy, "%d", panningSpeed);
 		Send(schedulerfd, tempy, strlen(tempy));
+
 		//sleep(rand());
 	}
 	char tempy[256];
